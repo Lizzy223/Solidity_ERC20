@@ -35,7 +35,7 @@ contract LizzieToken {
         decimals = _decimals;
     }
 
-    function transfer(address recipient, uint256 amount) external returns (bool){
+    function transfer(address recipient, uint256 amount) public  returns (bool){
         balanceOf[msg.sender] -= amount;
         balanceOf[recipient] += amount;
 
@@ -43,7 +43,7 @@ contract LizzieToken {
         return true;
     }
 
-    function approve(address spender, uint256 amount) external returns (bool){
+    function approve(address spender, uint256 amount) public  returns (bool){
         allowance[msg.sender][spender] = amount;
         emit Approve(msg.sender, spender, amount);
         return true;
@@ -57,5 +57,21 @@ contract LizzieToken {
         return true;
     }
 
-    
+     function _mint(address to, uint256 amount) internal {
+        balanceOf[to] += amount;
+        totalSupply += amount;
+        emit Transfer(address(0), to, amount);
+    }
+
+    function _burn(address from, uint256 amount) internal {
+        balanceOf[from] -= amount;
+        totalSupply -= amount;
+        emit Transfer(from, address(0), amount);
+    }
+
+    function mint(address to, uint256 amount) external {
+        _mint(to, amount);
+    }
+
+
 }
